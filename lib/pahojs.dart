@@ -12,8 +12,10 @@ class Client {
   external String get host;
   external int get port;
   external String get clientId;
-  external set onConnectionLost(Function);
-  external set onMessageArrived(Function);
+  external Function get onConnectionLost;
+  external set onConnectionLost(Function f);
+  external Function get onMessageArrived;
+  external set onMessageArrived(Function f);
   external connect(ConnectOptions options);
   external subscribe(String filter);
   external send(Message message);
@@ -27,10 +29,12 @@ class ConnectOptions {
   external Function get onSuccess;
   external int get timeout;
   external bool get reconnect;
+  external bool get useSSL;
   external factory ConnectOptions({
     Function onSuccess,
     int timeout,
     bool reconnect,
+    bool useSSL,
   });
 }
 
@@ -43,11 +47,11 @@ class Message {
   external Uint8List get payloadBytes;
   external bool get duplicate;
   external String get destinationName;
-  external set destinationName(String);
+  external set destinationName(String val);
   external int get qos;
-  external set qos(int);
+  external set qos(int val);
   external bool get retained;
-  external set retained(bool);
+  external set retained(bool val);
 }
 
 bool PayloadStringError(Message msg) {
