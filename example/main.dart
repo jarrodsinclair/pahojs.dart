@@ -1,3 +1,4 @@
+import 'dart:js' as dartjs;
 import 'dart:typed_data';
 import 'package:pahojs/pahojs.dart' as pahojs;
 
@@ -38,15 +39,15 @@ onMessageArrived(pahojs.Message msg) {
 main() {
   // main MQTT connection via websockets
   var c = pahojs.Client('localhost', 1884, 'dartBrowserClient');
-  c.onConnectionLost = onConnectionLost;
-  c.onMessageArrived = onMessageArrived;
+  c.onConnectionLost = dartjs.allowInterop(onConnectionLost);
+  c.onMessageArrived = dartjs.allowInterop(onMessageArrived);
 
   // connect and provide callback via closure
   // (in order to use the client object)
   c.connect(pahojs.ConnectOptions(
-    onSuccess: () {
+    onSuccess: dartjs.allowInterop(() {
       onConnect(c);
-    },
+    }),
     reconnect: true,
     timeout: 1,
   ));
