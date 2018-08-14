@@ -1,6 +1,7 @@
 @JS('Paho')
 library pahojs;
 
+import 'dart:js';
 import 'dart:typed_data';
 import 'package:js/js.dart';
 
@@ -25,16 +26,37 @@ class Client {
 
 @JS()
 @anonymous
-class ConnectOptions {
-  external Function get onSuccess;
-  external int get timeout;
+class OnConnectionResponse {
+  external JsObject get invocationContext;
+  external int get errorCode;
+  external String get errorMessage;
+  external int get grantedQos;
   external bool get reconnect;
-  external bool get useSSL;
-  external factory ConnectOptions({
-    Function onSuccess,
-    int timeout,
+  external factory OnConnectionResponse({
+    JsObject invocationContext,
+    int errorCode,
+    String errorMessage,
+    int grantedQos,
     bool reconnect,
+  });
+}
+
+@JS()
+@anonymous
+class ConnectOptions {
+  external int get timeout;
+  external int get keepAliveInterval;
+  external bool get useSSL;
+  external JsObject get invocationContext;
+  external Function get onSuccess;
+  external bool get reconnect;
+  external factory ConnectOptions({
+    int timeout,
+    int keepAliveInterval,
     bool useSSL,
+    JsObject invocationContext,
+    Function onSuccess,
+    bool reconnect,
   });
 }
 

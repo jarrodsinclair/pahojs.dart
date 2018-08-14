@@ -1,9 +1,11 @@
 import 'dart:js' as dartjs;
 import 'dart:typed_data';
+
 import 'package:pahojs/pahojs.dart' as pahojs;
 
-onConnect(pahojs.Client c) {
+onConnect(pahojs.OnConnectionResponse resp) {
   print('in onConnect');
+  pahojs.Client c = resp.invocationContext['mqttClient'];
   c.subscribe('#');
 
   // publish some messages using the Message object
@@ -21,12 +23,15 @@ onConnect(pahojs.Client c) {
       Uint8List.fromList([0, 1, 2, 60, 61, 62, 253, 254, 255]));
 }
 
-onConnectionLost() {
+onConnectionLost(pahojs.OnConnectionResponse resp) {
   print('in onConnectionLost');
+  print(resp.errorCode);
+  print(resp.errorMessage);
 }
 
 onMessageArrived(pahojs.Message msg) {
   print('in onMessageArrived');
+  print(msg);
   print(msg.destinationName);
   print('msg.PayloadStringError == ${pahojs.PayloadStringError(msg)}');
   if (!pahojs.PayloadStringError(msg)) {
@@ -45,10 +50,16 @@ main() {
   // connect and provide callback via closure
   // (in order to use the client object)
   c.connect(pahojs.ConnectOptions(
-    onSuccess: dartjs.allowInterop(() {
-      onConnect(c);
-    }),
-    reconnect: true,
     timeout: 1,
+    //keepAliveInterval: 60,
+    //useSSL: false,
+    //invocationContext: pahojs.UserData(
+    //  mqttClient: c,
+    //),
+    invocationContext: dartjs.JsObject.jsify({
+      'mqttClient': c,
+    }),
+    onSuccess: dartjs.allowInterop(onConnect),
+    reconnect: true,
   ));
 }
