@@ -20,8 +20,7 @@ class Client {
   external connect(ConnectOptions options);
   external subscribe(String filter);
   external send(Message message);
-  external publish(
-      String topic, dynamic payload); //TODO: {int qos, bool retained});
+  external publish(String topic, dynamic payload, int qos, bool retained);
 }
 
 @JS()

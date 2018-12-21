@@ -18,9 +18,9 @@ onConnect(pahojs.OnConnectionResponse resp) {
   c.send(msg);
 
   // publish using the publish convenience function
-  c.publish('from/self/publish/string', 'my string...');
+  c.publish('from/self/publish/string', 'my string...', 0, false);
   c.publish('from/self/publish/bytes',
-      Uint8List.fromList([0, 1, 2, 60, 61, 62, 253, 254, 255]));
+      Uint8List.fromList([0, 1, 2, 60, 61, 62, 253, 254, 255]), 0, false);
 }
 
 onConnectionLost(pahojs.OnConnectionResponse resp) {
